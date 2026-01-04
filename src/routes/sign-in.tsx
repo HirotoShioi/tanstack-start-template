@@ -1,5 +1,7 @@
+import { useForm } from "@tanstack/react-form";
 import { createFileRoute, Link, useNavigate } from "@tanstack/react-router";
 import { useId, useState } from "react";
+import * as z from "zod";
 import { Button } from "@/components/ui/button";
 import {
 	Card,
@@ -9,6 +11,12 @@ import {
 	CardTitle,
 } from "@/components/ui/card";
 import { Checkbox } from "@/components/ui/checkbox";
+import {
+	Field,
+	FieldError,
+	FieldGroup,
+	FieldLabel,
+} from "@/components/ui/field";
 import { Input } from "@/components/ui/input";
 import { authClient } from "@/lib/auth-client";
 
@@ -16,49 +24,58 @@ export const Route = createFileRoute("/sign-in")({
 	component: SignInPage,
 });
 
+const signInSchema = z.object({
+	email: z.string().min(1, "メールアドレスを入力してください").email("有効なメールアドレスを入力してください"),
+	password: z.string().min(1, "パスワードを入力してください"),
+	rememberMe: z.boolean(),
+});
+
 function SignInPage() {
 	const navigate = useNavigate();
-	const [email, setEmail] = useState("");
-	const [password, setPassword] = useState("");
 	const [error, setError] = useState("");
 	const [isLoading, setIsLoading] = useState(false);
-	const [rememberMe, setRememberMe] = useState(true);
+	const formId = useId();
 
-	const emailId = useId();
-	const passwordId = useId();
-	const rememberMeId = useId();
+	const form = useForm({
+		defaultValues: {
+			email: "",
+			password: "",
+			rememberMe: true,
+		},
+		validators: {
+			onSubmit: signInSchema,
+		},
+		onSubmit: async ({ value }) => {
+			setError("");
+			setIsLoading(true);
 
-	const handleSubmit = async (e: React.FormEvent) => {
-		e.preventDefault();
-		setError("");
-		setIsLoading(true);
-
-		const { error } = await authClient.signIn.email(
-			{
-				email,
-				password,
-				callbackURL: "/",
-				rememberMe,
-			},
-			{
-				onRequest: () => {
-					setIsLoading(true);
+			const { error } = await authClient.signIn.email(
+				{
+					email: value.email,
+					password: value.password,
+					callbackURL: "/",
+					rememberMe: value.rememberMe,
 				},
-				onSuccess: () => {
-					navigate({ to: "/" });
+				{
+					onRequest: () => {
+						setIsLoading(true);
+					},
+					onSuccess: () => {
+						navigate({ to: "/" });
+					},
+					onError: (ctx) => {
+						setError(ctx.error.message);
+						setIsLoading(false);
+					},
 				},
-				onError: (ctx) => {
-					setError(ctx.error.message);
-					setIsLoading(false);
-				},
-			},
-		);
+			);
 
-		if (error) {
-			setError(error.message || "サインインに失敗しました");
-		}
-		setIsLoading(false);
-	};
+			if (error) {
+				setError(error.message || "サインインに失敗しました");
+			}
+			setIsLoading(false);
+		},
+	});
 
 	return (
 		<div className="min-h-screen flex items-center justify-center px-4">
@@ -73,68 +90,98 @@ function SignInPage() {
 					</CardDescription>
 				</CardHeader>
 				<CardContent>
-					<form className="space-y-6" onSubmit={handleSubmit}>
+					<form
+						id={formId}
+						className="space-y-6"
+						onSubmit={(e) => {
+							e.preventDefault();
+							form.handleSubmit();
+						}}
+					>
 						{error && (
 							<div className="rounded-md bg-destructive/10 p-4">
 								<p className="text-sm text-destructive">{error}</p>
 							</div>
 						)}
 
-						<div className="space-y-4">
-							<div className="space-y-2">
-								<label
-									htmlFor={emailId}
-									className="block text-sm font-medium"
-								>
-									メールアドレス
-								</label>
-								<Input
-									id={emailId}
-									name="email"
-									type="email"
-									autoComplete="email"
-									required
-									value={email}
-									onChange={(e) => setEmail(e.target.value)}
-									placeholder="メールアドレスを入力"
-								/>
-							</div>
+						<FieldGroup>
+							<form.Field name="email">
+								{(field) => {
+									const isInvalid =
+										field.state.meta.isTouched && !field.state.meta.isValid;
+									return (
+										<Field data-invalid={isInvalid}>
+											<FieldLabel htmlFor={field.name}>
+												メールアドレス
+											</FieldLabel>
+											<Input
+												id={field.name}
+												name={field.name}
+												type="email"
+												autoComplete="email"
+												value={field.state.value}
+												onBlur={field.handleBlur}
+												onChange={(e) => field.handleChange(e.target.value)}
+												aria-invalid={isInvalid}
+												placeholder="メールアドレスを入力"
+											/>
+											{isInvalid && (
+												<FieldError errors={field.state.meta.errors} />
+											)}
+										</Field>
+									);
+								}}
+							</form.Field>
 
-							<div className="space-y-2">
-								<label
-									htmlFor={passwordId}
-									className="block text-sm font-medium"
-								>
-									パスワード
-								</label>
-								<Input
-									id={passwordId}
-									name="password"
-									type="password"
-									autoComplete="current-password"
-									required
-									value={password}
-									onChange={(e) => setPassword(e.target.value)}
-									placeholder="パスワードを入力"
-								/>
-							</div>
-						</div>
+							<form.Field name="password">
+								{(field) => {
+									const isInvalid =
+										field.state.meta.isTouched && !field.state.meta.isValid;
+									return (
+										<Field data-invalid={isInvalid}>
+											<FieldLabel htmlFor={field.name}>パスワード</FieldLabel>
+											<Input
+												id={field.name}
+												name={field.name}
+												type="password"
+												autoComplete="current-password"
+												value={field.state.value}
+												onBlur={field.handleBlur}
+												onChange={(e) => field.handleChange(e.target.value)}
+												aria-invalid={isInvalid}
+												placeholder="パスワードを入力"
+											/>
+											{isInvalid && (
+												<FieldError errors={field.state.meta.errors} />
+											)}
+										</Field>
+									);
+								}}
+							</form.Field>
 
-						<div className="flex items-center gap-2">
-							<Checkbox
-								id={rememberMeId}
-								checked={rememberMe}
-								onCheckedChange={(checked) =>
-									setRememberMe(checked === true)
-								}
-							/>
-							<label
-								htmlFor={rememberMeId}
-								className="text-sm cursor-pointer"
-							>
-								ログイン状態を保持
-							</label>
-						</div>
+							<form.Field name="rememberMe">
+								{(field) => {
+									return (
+										<Field orientation="horizontal">
+											<Checkbox
+												id={field.name}
+												name={field.name}
+												checked={field.state.value}
+												onCheckedChange={(checked) =>
+													field.handleChange(checked === true)
+												}
+											/>
+											<FieldLabel
+												htmlFor={field.name}
+												className="font-normal cursor-pointer"
+											>
+												ログイン状態を保持
+											</FieldLabel>
+										</Field>
+									);
+								}}
+							</form.Field>
+						</FieldGroup>
 
 						<Button type="submit" disabled={isLoading} className="w-full">
 							{isLoading ? "処理中..." : "サインイン"}

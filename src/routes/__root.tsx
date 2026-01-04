@@ -6,6 +6,7 @@ import {
 	Scripts,
 } from "@tanstack/react-router";
 import { TanStackRouterDevtoolsPanel } from "@tanstack/react-router-devtools";
+import { getUserSessionOptions } from "@/services/auth/queries";
 import TanStackQueryDevtools from "../integrations/tanstack-query/devtools";
 import appCss from "../styles.css?url";
 
@@ -34,7 +35,10 @@ export const Route = createRootRouteWithContext<MyRouterContext>()({
 			},
 		],
 	}),
-
+	beforeLoad: async ({ context }) => {
+		const userSession = await context.queryClient.fetchQuery(getUserSessionOptions());
+		return { userSession };
+	},
 	shellComponent: RootDocument,
 });
 

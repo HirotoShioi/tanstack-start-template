@@ -1,6 +1,6 @@
 import { createServerFn } from "@tanstack/react-start";
 import { authMiddleware } from "@/middlewares/auth";
-import { todoRepository } from "./repositoy";
+import { todoRepository } from "./repository";
 import { AddTodoSchema, DeleteTodoSchema, ToggleTodoSchema } from "./schema";
 
 export const getTodos = createServerFn()

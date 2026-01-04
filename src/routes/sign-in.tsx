@@ -1,6 +1,6 @@
 import { useForm } from "@tanstack/react-form";
-import { createFileRoute, Link, useNavigate } from "@tanstack/react-router";
-import { useId, useState } from "react";
+import { createFileRoute, Link } from "@tanstack/react-router";
+import { useId } from "react";
 import * as z from "zod";
 import { Button } from "@/components/ui/button";
 import {
@@ -18,7 +18,7 @@ import {
 	FieldLabel,
 } from "@/components/ui/field";
 import { Input } from "@/components/ui/input";
-import { authClient } from "@/lib/auth-client";
+import { useSignIn } from "@/services/auth/mutations";
 
 export const Route = createFileRoute("/sign-in")({
 	component: SignInPage,
@@ -31,10 +31,8 @@ const signInSchema = z.object({
 });
 
 function SignInPage() {
-	const navigate = useNavigate();
-	const [error, setError] = useState("");
-	const [isLoading, setIsLoading] = useState(false);
 	const formId = useId();
+	const signInMutation = useSignIn();
 
 	const form = useForm({
 		defaultValues: {
@@ -46,34 +44,7 @@ function SignInPage() {
 			onSubmit: signInSchema,
 		},
 		onSubmit: async ({ value }) => {
-			setError("");
-			setIsLoading(true);
-
-			const { error } = await authClient.signIn.email(
-				{
-					email: value.email,
-					password: value.password,
-					callbackURL: "/",
-					rememberMe: value.rememberMe,
-				},
-				{
-					onRequest: () => {
-						setIsLoading(true);
-					},
-					onSuccess: () => {
-						navigate({ to: "/" });
-					},
-					onError: (ctx) => {
-						setError(ctx.error.message);
-						setIsLoading(false);
-					},
-				},
-			);
-
-			if (error) {
-				setError(error.message || "サインインに失敗しました");
-			}
-			setIsLoading(false);
+			signInMutation.mutate(value);
 		},
 	});
 
@@ -98,9 +69,9 @@ function SignInPage() {
 							form.handleSubmit();
 						}}
 					>
-						{error && (
+						{signInMutation.error && (
 							<div className="rounded-md bg-destructive/10 p-4">
-								<p className="text-sm text-destructive">{error}</p>
+								<p className="text-sm text-destructive">{signInMutation.error.message}</p>
 							</div>
 						)}
 
@@ -183,8 +154,8 @@ function SignInPage() {
 							</form.Field>
 						</FieldGroup>
 
-						<Button type="submit" disabled={isLoading} className="w-full">
-							{isLoading ? "処理中..." : "サインイン"}
+						<Button type="submit" disabled={signInMutation.isPending} className="w-full">
+							{signInMutation.isPending ? "処理中..." : "サインイン"}
 						</Button>
 					</form>
 				</CardContent>

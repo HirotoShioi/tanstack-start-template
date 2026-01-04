@@ -1,6 +1,6 @@
 import { useForm } from "@tanstack/react-form";
-import { createFileRoute, Link, useNavigate } from "@tanstack/react-router";
-import { useId, useState } from "react";
+import { createFileRoute, Link } from "@tanstack/react-router";
+import { useId } from "react";
 import * as z from "zod";
 import { Button } from "@/components/ui/button";
 import {
@@ -17,7 +17,7 @@ import {
 	FieldLabel,
 } from "@/components/ui/field";
 import { Input } from "@/components/ui/input";
-import { authClient } from "@/lib/auth-client";
+import { useSignUp } from "@/services/auth/mutations";
 
 export const Route = createFileRoute("/sign-up")({
 	component: SignUpPage,
@@ -30,10 +30,8 @@ const signUpSchema = z.object({
 });
 
 function SignUpPage() {
-	const navigate = useNavigate();
-	const [error, setError] = useState("");
-	const [isLoading, setIsLoading] = useState(false);
 	const formId = useId();
+	const signUpMutation = useSignUp();
 
 	const form = useForm({
 		defaultValues: {
@@ -45,34 +43,7 @@ function SignUpPage() {
 			onSubmit: signUpSchema,
 		},
 		onSubmit: async ({ value }) => {
-			setError("");
-			setIsLoading(true);
-
-			const { error } = await authClient.signUp.email(
-				{
-					email: value.email,
-					password: value.password,
-					name: value.name,
-					callbackURL: "/",
-				},
-				{
-					onRequest: () => {
-						setIsLoading(true);
-					},
-					onSuccess: () => {
-						navigate({ to: "/" });
-					},
-					onError: (ctx) => {
-						setError(ctx.error.message);
-						setIsLoading(false);
-					},
-				},
-			);
-
-			if (error) {
-				setError(error.message || "サインアップに失敗しました");
-			}
-			setIsLoading(false);
+			signUpMutation.mutate(value);
 		},
 	});
 
@@ -97,9 +68,9 @@ function SignUpPage() {
 							form.handleSubmit();
 						}}
 					>
-						{error && (
+						{signUpMutation.error && (
 							<div className="rounded-md bg-destructive/10 p-4">
-								<p className="text-sm text-destructive">{error}</p>
+								<p className="text-sm text-destructive">{signUpMutation.error.message}</p>
 							</div>
 						)}
 
@@ -184,8 +155,8 @@ function SignUpPage() {
 							</form.Field>
 						</FieldGroup>
 
-						<Button type="submit" disabled={isLoading} className="w-full">
-							{isLoading ? "処理中..." : "サインアップ"}
+						<Button type="submit" disabled={signUpMutation.isPending} className="w-full">
+							{signUpMutation.isPending ? "処理中..." : "サインアップ"}
 						</Button>
 					</form>
 				</CardContent>

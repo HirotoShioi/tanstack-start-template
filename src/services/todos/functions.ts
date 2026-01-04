@@ -1,5 +1,5 @@
 import { createServerFn } from "@tanstack/react-start";
-import { authMiddleware } from "@/middleware/auth";
+import { authMiddleware } from "@/middlewares/auth";
 import { todoRepository } from "./repositoy";
 import { AddTodoSchema, DeleteTodoSchema, ToggleTodoSchema } from "./schema";
 

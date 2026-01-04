@@ -33,7 +33,7 @@ function TodoList() {
 					<CardContent className="space-y-6">
 						<TodoForm />
 						<div className="space-y-2">
-							{todosQuery.isLoading ? (
+							{todosQuery.isFetching ? (
 								<div className="flex justify-center py-8">
 									<Loader2 className="h-6 w-6 animate-spin text-muted-foreground" />
 								</div>

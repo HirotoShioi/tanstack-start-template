@@ -12,9 +12,7 @@ export function render(ui: React.ReactElement) {
 	queryClient.clear();
 	return renderUI(ui, {
 		wrapper: ({ children }) => (
-				<QueryClientProvider client={queryClient}>
-							{children}
-				</QueryClientProvider>
+			<QueryClientProvider client={queryClient}>{children}</QueryClientProvider>
 		),
 	});
 }

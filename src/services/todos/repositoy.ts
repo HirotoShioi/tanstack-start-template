@@ -1,7 +1,7 @@
 import { and, eq } from "drizzle-orm";
 import { db } from "@/db";
 import { todos } from "@/db/schema";
-import type { Todo } from "./model";
+import type { Todo } from "./models";
 
 interface TodoRepository {
 	get(
@@ -60,8 +60,8 @@ async function toggleCompletion(userId: string, todoId: number): Promise<void> {
 }
 
 export const todoRepository: TodoRepository = {
-    get: get,
-    add: add,
+    get,
+    add,
     delete: deleteTodo,
-    toggleCompletion: toggleCompletion,
+    toggleCompletion,
 };

@@ -17,7 +17,7 @@ import {
 	FieldLabel,
 } from "@/components/ui/field";
 import { Input } from "@/components/ui/input";
-import { useSignUp } from "@/services/auth/mutations";
+import { useSignUp } from "@/services/auth/queries";
 
 export const Route = createFileRoute("/sign-up")({
 	component: SignUpPage,

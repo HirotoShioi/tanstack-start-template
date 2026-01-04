@@ -9,7 +9,7 @@ const mockToggleMutate = vi.fn();
 let mockDeleteIsPending = false;
 let mockToggleIsPending = false;
 
-vi.mock("@/services/todos/mutations", () => ({
+vi.mock("@/services/todos/queries.ts", () => ({
 	useDeleteTodo: () => ({
 		mutate: mockDeleteMutate,
 		isPending: mockDeleteIsPending,

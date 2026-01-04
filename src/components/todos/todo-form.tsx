@@ -2,7 +2,7 @@ import { Loader2, Plus } from "lucide-react";
 import { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import { useAddTodo } from "../../services/todos/mutations";
+import { useAddTodo } from "../../services/todos/queries";
 
 export function TodoForm() {
 	const [newTodoTitle, setNewTodoTitle] = useState("");

@@ -10,7 +10,9 @@ import {
 export const todos = pgTable("todos", {
 	id: serial().primaryKey(),
 	title: text().notNull(),
+	completed: boolean().default(false).notNull(),
 	createdAt: timestamp("created_at").defaultNow(),
+	userId: text("user_id").notNull(),
 });
 
 export const user = pgTable("user", {

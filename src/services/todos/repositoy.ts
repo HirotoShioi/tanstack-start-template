@@ -1,4 +1,4 @@
-import { and, eq } from "drizzle-orm";
+import { and, asc, eq } from "drizzle-orm";
 import { db } from "@/db";
 import { todos } from "@/db/schema";
 import type { Todo } from "./models";
@@ -21,7 +21,8 @@ async function get(
     return await db
         .select()
         .from(todos)
-        .where(eq(todos.userId, userId));
+        .where(eq(todos.userId, userId))
+        .orderBy(asc(todos.id));
 }
 
 async function add(

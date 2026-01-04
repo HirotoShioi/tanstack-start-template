@@ -1,7 +1,7 @@
-import { redirect } from "@tanstack/react-router";
-import { createMiddleware, createServerFn } from "@tanstack/react-start";
-import { getRequest } from "@tanstack/react-start/server";
-import { auth } from "@/lib/auth";
+import { redirect } from "@tanstack/react-router"
+import { createMiddleware, createServerFn } from "@tanstack/react-start"
+import { getRequest } from "@tanstack/react-start/server"
+import { auth } from "@/lib/auth"
 
 export const getUserSession = createServerFn({ method: "GET" }).handler(
   async () => {

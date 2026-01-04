@@ -1,5 +1,5 @@
 import { queryOptions } from "@tanstack/react-query";
-import { getUserSession } from "@/middleware/auth";
+import { getUserSession } from "./functions";
 
 export const authKeys = {
 	all: ["auth"] as const,

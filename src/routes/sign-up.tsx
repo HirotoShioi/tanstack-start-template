@@ -25,7 +25,10 @@ export const Route = createFileRoute("/sign-up")({
 
 const signUpSchema = z.object({
 	name: z.string().min(1, "名前を入力してください"),
-	email: z.string().min(1, "メールアドレスを入力してください").email("有効なメールアドレスを入力してください"),
+	email: z
+		.string()
+		.min(1, "メールアドレスを入力してください")
+		.email("有効なメールアドレスを入力してください"),
 	password: z.string().min(8, "パスワードは8文字以上で入力してください"),
 });
 
@@ -70,7 +73,9 @@ function SignUpPage() {
 					>
 						{signUpMutation.error && (
 							<div className="rounded-md bg-destructive/10 p-4">
-								<p className="text-sm text-destructive">{signUpMutation.error.message}</p>
+								<p className="text-sm text-destructive">
+									{signUpMutation.error.message}
+								</p>
 							</div>
 						)}
 
@@ -155,7 +160,11 @@ function SignUpPage() {
 							</form.Field>
 						</FieldGroup>
 
-						<Button type="submit" disabled={signUpMutation.isPending} className="w-full">
+						<Button
+							type="submit"
+							disabled={signUpMutation.isPending}
+							className="w-full"
+						>
 							{signUpMutation.isPending ? "処理中..." : "サインアップ"}
 						</Button>
 					</form>

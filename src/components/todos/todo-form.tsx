@@ -15,7 +15,7 @@ export function TodoForm() {
 			{ data: { title: newTodoTitle } },
 			{
 				onSuccess: () => setNewTodoTitle(""),
-			}
+			},
 		);
 	};
 

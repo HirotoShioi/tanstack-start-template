@@ -19,9 +19,7 @@ function App() {
 					<CheckCircle2 className="h-16 w-16 text-primary" />
 				</div>
 				<h1 className="text-4xl font-bold">Todo App</h1>
-				<p className="text-muted-foreground">
-					シンプルなTodo管理アプリ
-				</p>
+				<p className="text-muted-foreground">シンプルなTodo管理アプリ</p>
 				<div className="pt-4 flex gap-3 justify-center">
 					<Button asChild variant="outline" size="lg">
 						<Link to="/sign-in">ログイン</Link>

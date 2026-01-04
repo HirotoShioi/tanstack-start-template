@@ -25,7 +25,10 @@ export const Route = createFileRoute("/sign-in")({
 });
 
 const signInSchema = z.object({
-	email: z.string().min(1, "メールアドレスを入力してください").email("有効なメールアドレスを入力してください"),
+	email: z
+		.string()
+		.min(1, "メールアドレスを入力してください")
+		.email("有効なメールアドレスを入力してください"),
 	password: z.string().min(1, "パスワードを入力してください"),
 	rememberMe: z.boolean(),
 });
@@ -71,7 +74,9 @@ function SignInPage() {
 					>
 						{signInMutation.error && (
 							<div className="rounded-md bg-destructive/10 p-4">
-								<p className="text-sm text-destructive">{signInMutation.error.message}</p>
+								<p className="text-sm text-destructive">
+									{signInMutation.error.message}
+								</p>
 							</div>
 						)}
 
@@ -154,7 +159,11 @@ function SignInPage() {
 							</form.Field>
 						</FieldGroup>
 
-						<Button type="submit" disabled={signInMutation.isPending} className="w-full">
+						<Button
+							type="submit"
+							disabled={signInMutation.isPending}
+							className="w-full"
+						>
 							{signInMutation.isPending ? "処理中..." : "サインイン"}
 						</Button>
 					</form>

@@ -36,7 +36,9 @@ export const Route = createRootRouteWithContext<MyRouterContext>()({
 		],
 	}),
 	beforeLoad: async ({ context }) => {
-		const userSession = await context.queryClient.fetchQuery(getUserSessionOptions());
+		const userSession = await context.queryClient.fetchQuery(
+			getUserSessionOptions(),
+		);
 		return { userSession };
 	},
 	shellComponent: RootDocument,

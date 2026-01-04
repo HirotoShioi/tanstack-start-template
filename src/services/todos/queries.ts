@@ -10,7 +10,6 @@ export function getTodosOptions() {
 	return queryOptions({
 		queryKey: [...todoKeys.all],
 		queryFn: () => getTodos(),
-		initialData: [],
 	});
 }
 

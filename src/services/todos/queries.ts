@@ -1,6 +1,11 @@
 import { queryOptions, useMutation } from "@tanstack/react-query";
 import { queryClient } from "@/lib/query-client";
-import { addTodo, deleteTodo, getTodos, toggleTodoCompletion } from "./server-functions";
+import {
+	addTodo,
+	deleteTodo,
+	getTodos,
+	toggleTodoCompletion,
+} from "./server-functions";
 
 export const todoKeys = {
 	all: ["todos"] as const,

@@ -6,7 +6,7 @@ import { TodoItem } from "@/components/todos/todo-item";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { getTodosOptions } from "@/services/todos/queries";
 
-export const Route = createFileRoute("/_authed/todos")({
+export const Route = createFileRoute("/_authenticated/todos")({
 	loader: async ({ context }) => {
 		await context.queryClient.ensureQueryData(getTodosOptions());
 	},
@@ -42,5 +42,5 @@ function TodoList() {
 				</Card>
 			</div>
 		</div>
-	)
+	);
 }

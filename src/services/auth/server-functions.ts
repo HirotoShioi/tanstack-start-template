@@ -1,4 +1,4 @@
-import {  createServerFn } from "@tanstack/react-start";
+import { createServerFn } from "@tanstack/react-start";
 import { getRequest } from "@tanstack/react-start/server";
 import { auth } from "@/lib/auth";
 

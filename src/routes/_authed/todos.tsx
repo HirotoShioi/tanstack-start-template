@@ -1,17 +1,12 @@
 import { useSuspenseQuery } from "@tanstack/react-query";
-import { createFileRoute, redirect } from "@tanstack/react-router";
+import { createFileRoute } from "@tanstack/react-router";
 import { Header } from "@/components/todos/header";
 import { TodoForm } from "@/components/todos/todo-form";
 import { TodoItem } from "@/components/todos/todo-item";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { getTodosOptions } from "@/services/todos/queries";
 
-export const Route = createFileRoute("/todos")({
-	beforeLoad: async ({ context }) => {
-		if (!context.userSession) {
-			throw redirect({ to: "/" });
-		}
-	},
+export const Route = createFileRoute("/_authed/todos")({
 	loader: async ({ context }) => {
 		await context.queryClient.ensureQueryData(getTodosOptions());
 	},
@@ -47,5 +42,5 @@ function TodoList() {
 				</Card>
 			</div>
 		</div>
-	);
+	)
 }

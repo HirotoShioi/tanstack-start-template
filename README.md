@@ -1,4 +1,4 @@
-# My App
+# TanStack Start Template
 
 TanStack Start を使用したフルスタック React アプリケーションです。認証機能付きの Todo アプリを実装しています。
 
@@ -7,13 +7,10 @@ TanStack Start を使用したフルスタック React アプリケーション�
 | カテゴリ | 技術 |
 |---------|------|
 | フレームワーク | [TanStack Start](https://tanstack.com/start) |
-| ルーティング | [TanStack Router](https://tanstack.com/router) (ファイルベース) |
-| 状態管理 | [TanStack Query](https://tanstack.com/query) |
 | データベース | PostgreSQL + [Drizzle ORM](https://orm.drizzle.team/) |
 | 認証 | [Better Auth](https://www.better-auth.com/) |
 | UI | [Shadcn UI](https://ui.shadcn.com/) + [Tailwind CSS v4](https://tailwindcss.com/) |
 | テスト | [Vitest](https://vitest.dev/) + [Playwright](https://playwright.dev/) |
-| ビルド | [Vite](https://vite.dev/) + [Nitro](https://nitro.build/) (SSR) |
 
 ## セットアップ
 

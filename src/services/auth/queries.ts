@@ -1,5 +1,5 @@
 import { queryOptions, useMutation } from "@tanstack/react-query";
-import { useNavigate } from "@tanstack/react-router";
+import { useNavigate, useRouter } from "@tanstack/react-router";
 import { authClient } from "@/lib/auth-client";
 import { getUserSession } from "./server-functions";
 
@@ -70,6 +70,23 @@ export function useSignUp() {
 		},
 		onSuccess: () => {
 			navigate({ to: "/" });
+		},
+	});
+}
+
+export function useSignOut() {
+	const router = useRouter();
+
+	return useMutation({
+		mutationFn: async () => {
+			const { error } = await authClient.signOut();
+
+			if (error) {
+				throw new Error(error.message || "サインアウトに失敗しました");
+			}
+		},
+		onSuccess: () => {
+			router.invalidate();
 		},
 	});
 }

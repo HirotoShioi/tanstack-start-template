@@ -1,19 +1,13 @@
-import { useRouter } from "@tanstack/react-router";
 import { LogOut } from "lucide-react";
 import { Button } from "@/components/ui/button";
-import { signOut } from "@/lib/auth-client";
+import { useSignOut } from "@/services/auth/queries";
 
 interface HeaderProps {
 	email?: string;
 }
 
 export function Header({ email }: HeaderProps) {
-	const router = useRouter();
-
-	const handleSignOut = async () => {
-		await signOut();
-		router.invalidate();
-	};
+	const signOut = useSignOut();
 
 	return (
 		<header className="border-b">
@@ -21,7 +15,7 @@ export function Header({ email }: HeaderProps) {
 				<span className="font-semibold">Todo App</span>
 				<div className="flex items-center gap-4">
 					<span className="text-sm text-muted-foreground">{email}</span>
-					<Button variant="ghost" size="sm" onClick={handleSignOut}>
+					<Button variant="ghost" size="sm" onClick={() => signOut.mutate()}>
 						<LogOut className="h-4 w-4 mr-1" />
 						ログアウト
 					</Button>

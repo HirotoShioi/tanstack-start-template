@@ -1,6 +1,5 @@
 import { useSuspenseQuery } from "@tanstack/react-query";
 import { createFileRoute, redirect } from "@tanstack/react-router";
-import { Loader2 } from "lucide-react";
 import { Header } from "@/components/todos/header";
 import { TodoForm } from "@/components/todos/todo-form";
 import { TodoItem } from "@/components/todos/todo-item";
@@ -12,9 +11,10 @@ export const Route = createFileRoute("/todos")({
 		if (!context.userSession) {
 			throw redirect({ to: "/" });
 		}
+	},
+	loader: async ({ context }) => {
 		await context.queryClient.ensureQueryData(getTodosOptions());
 	},
-
 	component: TodoList,
 });
 
@@ -33,11 +33,7 @@ function TodoList() {
 					<CardContent className="space-y-6">
 						<TodoForm />
 						<div className="space-y-2">
-							{todosQuery.isFetching ? (
-								<div className="flex justify-center py-8">
-									<Loader2 className="h-6 w-6 animate-spin text-muted-foreground" />
-								</div>
-							) : todosQuery.data.length === 0 ? (
+							{todosQuery.data.length === 0 ? (
 								<p className="text-center text-muted-foreground py-8">
 									Todoがありません。新しいTodoを追加してください。
 								</p>

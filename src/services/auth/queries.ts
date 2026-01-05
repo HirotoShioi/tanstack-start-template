@@ -1,7 +1,7 @@
 import { queryOptions, useMutation } from "@tanstack/react-query";
 import { useNavigate } from "@tanstack/react-router";
 import { authClient } from "@/lib/auth-client";
-import { getUserSession } from "./functions";
+import { getUserSession } from "./server-functions";
 
 export const authKeys = {
 	all: ["auth"] as const,

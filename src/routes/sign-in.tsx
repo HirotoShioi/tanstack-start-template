@@ -26,9 +26,8 @@ export const Route = createFileRoute("/sign-in")({
 
 const signInSchema = z.object({
 	email: z
-		.string()
-		.min(1, "メールアドレスを入力してください")
-		.email("有効なメールアドレスを入力してください"),
+		.email("有効なメールアドレスを入力してください")
+		.min(1, "メールアドレスを入力してください"),
 	password: z.string().min(1, "パスワードを入力してください"),
 	rememberMe: z.boolean(),
 });

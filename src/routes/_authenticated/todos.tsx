@@ -4,7 +4,7 @@ import { Header } from "@/components/todos/header";
 import { TodoForm } from "@/components/todos/todo-form";
 import { TodoItem } from "@/components/todos/todo-item";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { getTodosOptions } from "@/services/todos/queries";
+import { getTodosOptions } from "@/services/todos/todos.queries";
 
 export const Route = createFileRoute("/_authenticated/todos")({
 	loader: async ({ context }) => {

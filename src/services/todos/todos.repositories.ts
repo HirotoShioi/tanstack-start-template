@@ -1,7 +1,7 @@
 import { and, asc, eq } from "drizzle-orm";
 import { db } from "@/db";
 import { todos } from "@/db/schema";
-import type { Todo } from "./models";
+import type { Todo } from "./todos.models";
 
 interface TodoRepository {
 	get(userId: string): Promise<Array<Todo>>;

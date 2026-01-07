@@ -18,7 +18,7 @@ import {
 	FieldLabel,
 } from "@/components/ui/field";
 import { Input } from "@/components/ui/input";
-import { useSignIn } from "@/services/auth/queries";
+import { useSignIn } from "@/services/auth/auth.queries";
 
 export const Route = createFileRoute("/sign-in")({
 	component: SignInPage,

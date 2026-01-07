@@ -1,6 +1,6 @@
 import { LogOut } from "lucide-react";
 import { Button } from "@/components/ui/button";
-import { useSignOut } from "@/services/auth/queries";
+import { useSignOut } from "@/services/auth/auth.queries";
 
 interface HeaderProps {
 	email?: string;

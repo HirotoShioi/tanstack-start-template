@@ -1,6 +1,6 @@
 import { beforeEach, describe, expect, it, vi } from "vitest";
 import { userEvent } from "vitest/browser";
-import type { Todo } from "@/services/todos/models";
+import type { Todo } from "@/services/todos/todos.models";
 import { render } from "@/test/render";
 
 // ミューテーションフックをモック
@@ -9,7 +9,7 @@ const mockToggleMutate = vi.fn();
 let mockDeleteIsPending = false;
 let mockToggleIsPending = false;
 
-vi.mock("@/services/todos/queries.ts", () => ({
+vi.mock("@/services/todos/todos.queries.ts", () => ({
 	useDeleteTodo: () => ({
 		mutate: mockDeleteMutate,
 		isPending: mockDeleteIsPending,

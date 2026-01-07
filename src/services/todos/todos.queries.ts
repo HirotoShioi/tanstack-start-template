@@ -5,7 +5,7 @@ import {
 	deleteTodo,
 	getTodos,
 	toggleTodoCompletion,
-} from "./todos.functions";
+} from "./todos.server-functions";
 
 export const todoKeys = {
 	all: ["todos"] as const,

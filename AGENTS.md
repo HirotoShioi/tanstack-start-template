@@ -7,10 +7,11 @@
 - `pnpm watch` - Run TypeScript type checking in watch mode
 
 ### Testing
-- `pnpm test` - Run all tests (non-browser tests via Vitest)
+- `pnpm test` - Run all tests
 - `pnpm test:browser` - Run browser-based component tests with Playwright
   - Browser tests use the `*.browser.test.tsx` naming convention
   - Non-browser tests use standard `*.test.ts` or `*.test.tsx` naming
+  - Browser test configuration in [vitest.config.ts](vitest.config.ts) under "browser" project
 
 ### Database (Drizzle ORM + PostgreSQL)
 - `pnpm db:generate` - Generate migration files from schema
@@ -58,15 +59,15 @@ Route files auto-generate [src/routeTree.gen.ts](src/routeTree.gen.ts) - do not 
 
 #### Services Layer ([src/services/](src/services/))
 Business logic organized by domain with consistent structure:
-- `functions.ts` - Server functions using `createServerFn()` from TanStack Start
-- `queries.ts` - TanStack Query hooks (query options, mutations)
-- `models.ts` / `model.ts` - TypeScript types/interfaces
-- `repository.ts` - Database access layer using Drizzle ORM
-- `schema.ts` - Zod schemas for input validation
+- `*.server-functions.ts` - Server functions using `createServerFn()` from TanStack Start
+- `*.queries.ts` - TanStack Query hooks (query options, mutations)
+- `*.models.ts` - TypeScript types/interfaces
+- `*.repositories.ts` - Database access layer using Drizzle ORM
+- `*.schemas.ts` - Zod schemas for input validation
 
 Example pattern (todos):
-1. Client calls mutation hook from `queries.ts`
-2. Hook calls server function from `functions.ts`
+1. Client calls mutation hook from `*.queries.ts`
+2. Hook calls server function from `*.server-functions.ts`
 3. Server function validates input, uses middleware, calls repository
 4. Repository performs database operations via Drizzle
 

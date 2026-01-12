@@ -23,7 +23,7 @@ export function TodoForm() {
 		<form onSubmit={handleAddTodo} className="flex gap-2">
 			<Input
 				type="text"
-				placeholder="新しいTodoを入力..."
+				placeholder="Enter a new todo..."
 				value={newTodoTitle}
 				onChange={(e) => setNewTodoTitle(e.target.value)}
 				disabled={addTodoMutation.isPending}
@@ -37,7 +37,7 @@ export function TodoForm() {
 				) : (
 					<Plus className="h-4 w-4" />
 				)}
-				追加
+				Add
 			</Button>
 		</form>
 	);

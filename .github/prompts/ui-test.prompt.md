@@ -51,13 +51,13 @@ Prefer `getByRole` with accessible names. This ensures components are accessible
 
 ```tsx
 // ✅ Good: Role-based queries (accessibility-first)
-const submitButton = screen.getByRole("button", { name: "送信する" });
-const emailInput = screen.getByRole("textbox", { name: /メールアドレス/i });
+const submitButton = screen.getByRole("button", { name: "Submit" });
+const emailInput = screen.getByRole("textbox", { name: /Email address/i });
 const closeButton = screen.getByRole("button", { name: "Close" });
 
 // ⚠️ Acceptable: When role is not available
-const label = screen.getByText("インポート済み");
-const errorMessage = screen.getByText(/エラーが発生しました/);
+const label = screen.getByText("Imported");
+const errorMessage = screen.getByText(/An error occurred/);
 
 // ❌ Avoid: Test IDs unless absolutely necessary
 const element = screen.getByTestId("submit-button");
@@ -93,10 +93,10 @@ it("shows error message when email format is invalid", async () => {
     screen.getByRole("textbox", { name: /email/i }),
     "invalid"
   );
-  await userEvent.click(screen.getByRole("button", { name: "送信" }));
+  await userEvent.click(screen.getByRole("button", { name: "Submit" }));
 
   await expect
-    .element(screen.getByText("有効なメールアドレスを入力してください"))
+    .element(screen.getByText("Please enter a valid email address"))
     .toBeInTheDocument();
 });
 
@@ -115,11 +115,11 @@ Write descriptions that explain expected behavior:
 
 ```tsx
 // ✅ Good: Describes user-facing behavior
-describe("インポートボタンの状態", () => {
-  it("アドレスが選択されていない場合はボタンが無効になる", async () => {
+describe("Import button state", () => {
+  it("Button is disabled when no address is selected", async () => {
     /* ... */
   });
-  it("アドレスが選択されている場合はボタンが有効になる", async () => {
+  it("Button is enabled when address is selected", async () => {
     /* ... */
   });
 });
@@ -168,7 +168,7 @@ describe("DataComponent", () => {
     const screen = await render(<UserList />);
 
     await expect
-      .element(screen.getByText(/エラーが発生しました/))
+      .element(screen.getByText(/An error occurred/))
       .toBeInTheDocument();
   });
 });
@@ -203,43 +203,43 @@ const defaultProps = {
 };
 
 describe("MyComponent", () => {
-  describe("初期表示", () => {
-    it("タイトルが表示される", async () => {
+  describe("Initial display", () => {
+    it("Title is displayed", async () => {
       const screen = await render(<MyComponent {...defaultProps} />);
 
       await expect
-        .element(screen.getByRole("heading", { name: "タイトル" }))
+        .element(screen.getByRole("heading", { name: "Title" }))
         .toBeInTheDocument();
     });
   });
 
-  describe("ユーザー操作", () => {
-    it("送信ボタンをクリックするとonSubmitが呼ばれる", async () => {
+  describe("User interaction", () => {
+    it("onSubmit is called when submit button is clicked", async () => {
       const onSubmit = vi.fn();
       const screen = await render(
         <MyComponent {...defaultProps} onSubmit={onSubmit} />
       );
 
-      await userEvent.click(screen.getByRole("button", { name: "送信" }));
+      await userEvent.click(screen.getByRole("button", { name: "Submit" }));
 
       expect(onSubmit).toHaveBeenCalled();
     });
   });
 
-  describe("バリデーション", () => {
-    it("必須項目が空の場合はエラーメッセージを表示する", async () => {
+  describe("Validation", () => {
+    it("Shows error message when required field is empty", async () => {
       const screen = await render(<MyComponent {...defaultProps} />);
 
-      await userEvent.click(screen.getByRole("button", { name: "送信" }));
+      await userEvent.click(screen.getByRole("button", { name: "Submit" }));
 
       await expect
-        .element(screen.getByText("必須項目です"))
+        .element(screen.getByText("Required field"))
         .toBeInTheDocument();
     });
   });
 
-  describe("APIとの連携", () => {
-    it("データ取得成功時に一覧を表示する", async () => {
+  describe("API Integration", () => {
+    it("Displays list on successful data fetch", async () => {
       worker.use(
         http.get("*/api/v1/items", () => {
           return HttpResponse.json({ data: mockData });

@@ -17,7 +17,7 @@ export function Header({ email }: HeaderProps) {
 					<span className="text-sm text-muted-foreground">{email}</span>
 					<Button variant="ghost" size="sm" onClick={() => signOut.mutate()}>
 						<LogOut className="h-4 w-4 mr-1" />
-						ログアウト
+						Logout
 					</Button>
 				</div>
 			</div>

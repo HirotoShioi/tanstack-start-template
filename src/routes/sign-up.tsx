@@ -24,11 +24,11 @@ export const Route = createFileRoute("/sign-up")({
 });
 
 const signUpSchema = z.object({
-	name: z.string().min(1, "名前を入力してください"),
+	name: z.string().min(1, "Please enter your name"),
 	email: z
-		.email("有効なメールアドレスを入力してください")
-		.min(1, "メールアドレスを入力してください"),
-	password: z.string().min(8, "パスワードは8文字以上で入力してください"),
+		.email("Please enter a valid email address")
+		.min(1, "Please enter your email address"),
+	password: z.string().min(8, "Password must be at least 8 characters"),
 });
 
 function SignUpPage() {
@@ -53,11 +53,11 @@ function SignUpPage() {
 		<div className="min-h-screen flex items-center justify-center px-4">
 			<Card className="w-full max-w-md">
 				<CardHeader className="text-center">
-					<CardTitle className="text-2xl">アカウントを作成</CardTitle>
+					<CardTitle className="text-2xl">Create an account</CardTitle>
 					<CardDescription>
-						すでにアカウントをお持ちですか？{" "}
+						Already have an account?{" "}
 						<Link to="/sign-in" className="text-primary hover:underline">
-							サインイン
+							Sign in
 						</Link>
 					</CardDescription>
 				</CardHeader>
@@ -85,7 +85,7 @@ function SignUpPage() {
 										field.state.meta.isTouched && !field.state.meta.isValid;
 									return (
 										<Field data-invalid={isInvalid}>
-											<FieldLabel htmlFor={field.name}>名前</FieldLabel>
+											<FieldLabel htmlFor={field.name}>Name</FieldLabel>
 											<Input
 												id={field.name}
 												name={field.name}
@@ -94,7 +94,7 @@ function SignUpPage() {
 												onBlur={field.handleBlur}
 												onChange={(e) => field.handleChange(e.target.value)}
 												aria-invalid={isInvalid}
-												placeholder="名前を入力"
+												placeholder="Enter your name"
 											/>
 											{isInvalid && (
 												<FieldError errors={field.state.meta.errors} />
@@ -110,9 +110,7 @@ function SignUpPage() {
 										field.state.meta.isTouched && !field.state.meta.isValid;
 									return (
 										<Field data-invalid={isInvalid}>
-											<FieldLabel htmlFor={field.name}>
-												メールアドレス
-											</FieldLabel>
+											<FieldLabel htmlFor={field.name}>Email</FieldLabel>
 											<Input
 												id={field.name}
 												name={field.name}
@@ -122,7 +120,7 @@ function SignUpPage() {
 												onBlur={field.handleBlur}
 												onChange={(e) => field.handleChange(e.target.value)}
 												aria-invalid={isInvalid}
-												placeholder="メールアドレスを入力"
+												placeholder="Enter your email"
 											/>
 											{isInvalid && (
 												<FieldError errors={field.state.meta.errors} />
@@ -138,7 +136,7 @@ function SignUpPage() {
 										field.state.meta.isTouched && !field.state.meta.isValid;
 									return (
 										<Field data-invalid={isInvalid}>
-											<FieldLabel htmlFor={field.name}>パスワード</FieldLabel>
+											<FieldLabel htmlFor={field.name}>Password</FieldLabel>
 											<Input
 												id={field.name}
 												name={field.name}
@@ -148,7 +146,7 @@ function SignUpPage() {
 												onBlur={field.handleBlur}
 												onChange={(e) => field.handleChange(e.target.value)}
 												aria-invalid={isInvalid}
-												placeholder="パスワードを入力（8文字以上）"
+												placeholder="Enter your password (at least 8 characters)"
 											/>
 											{isInvalid && (
 												<FieldError errors={field.state.meta.errors} />
@@ -164,7 +162,7 @@ function SignUpPage() {
 							disabled={signUpMutation.isPending}
 							className="w-full"
 						>
-							{signUpMutation.isPending ? "処理中..." : "サインアップ"}
+							{signUpMutation.isPending ? "Processing..." : "Sign up"}
 						</Button>
 					</form>
 				</CardContent>

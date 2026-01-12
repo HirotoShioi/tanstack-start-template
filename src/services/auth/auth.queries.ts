@@ -39,7 +39,7 @@ export function useSignIn() {
 			});
 
 			if (error) {
-				throw new Error(error.message || "サインインに失敗しました");
+				throw new Error(error.message || "Failed to sign in");
 			}
 
 			return data;
@@ -63,7 +63,7 @@ export function useSignUp() {
 			});
 
 			if (error) {
-				throw new Error(error.message || "サインアップに失敗しました");
+				throw new Error(error.message || "Failed to sign up");
 			}
 
 			return data;
@@ -82,7 +82,7 @@ export function useSignOut() {
 			const { error } = await authClient.signOut();
 
 			if (error) {
-				throw new Error(error.message || "サインアウトに失敗しました");
+				throw new Error(error.message || "Failed to sign out");
 			}
 		},
 		onSuccess: () => {

@@ -3,7 +3,7 @@ import { userEvent } from "vitest/browser";
 import type { Todo } from "@/services/todos/todos.models";
 import { render } from "@/test/render";
 
-// ミューテーションフックをモック
+// Mock mutation hooks
 const mockDeleteMutate = vi.fn();
 const mockToggleMutate = vi.fn();
 let mockDeleteIsPending = false;
@@ -20,13 +20,13 @@ vi.mock("@/services/todos/todos.queries.ts", () => ({
 	}),
 }));
 
-// モック設定後にコンポーネントをインポート
+// Import component after mock setup
 const { TodoItem } = await import("./todo-item");
 
-// テストデータ
+// Test data
 const createTodo = (overrides: Partial<Todo> = {}): Todo => ({
 	id: 1,
-	title: "テストTodo",
+	title: "Test Todo",
 	completed: false,
 	createdAt: new Date(),
 	userId: "user-1",
@@ -40,17 +40,15 @@ describe("TodoItem", () => {
 		mockToggleIsPending = false;
 	});
 
-	describe("初期表示", () => {
-		it("Todoのタイトルが表示される", async () => {
-			const todo = createTodo({ title: "買い物に行く" });
+	describe("Initial display", () => {
+		it("displays the todo title", async () => {
+			const todo = createTodo({ title: "Go shopping" });
 			const screen = await render(<TodoItem todo={todo} />);
 
-			await expect
-				.element(screen.getByText("買い物に行く"))
-				.toBeInTheDocument();
+			await expect.element(screen.getByText("Go shopping")).toBeInTheDocument();
 		});
 
-		it("未完了のTodoはチェックボックスがオフになっている", async () => {
+		it("checkbox is unchecked for incomplete todos", async () => {
 			const todo = createTodo({ completed: false });
 			const screen = await render(<TodoItem todo={todo} />);
 
@@ -58,7 +56,7 @@ describe("TodoItem", () => {
 			await expect.element(checkbox).not.toBeChecked();
 		});
 
-		it("完了済みのTodoはチェックボックスがオンになっている", async () => {
+		it("checkbox is checked for completed todos", async () => {
 			const todo = createTodo({ completed: true });
 			const screen = await render(<TodoItem todo={todo} />);
 
@@ -66,7 +64,7 @@ describe("TodoItem", () => {
 			await expect.element(checkbox).toBeChecked();
 		});
 
-		it("削除ボタンが表示される", async () => {
+		it("displays the delete button", async () => {
 			const todo = createTodo();
 			const screen = await render(<TodoItem todo={todo} />);
 
@@ -74,8 +72,8 @@ describe("TodoItem", () => {
 		});
 	});
 
-	describe("ユーザー操作", () => {
-		it("チェックボックスをクリックするとトグルミューテーションが呼ばれる", async () => {
+	describe("User interaction", () => {
+		it("calls toggle mutation when checkbox is clicked", async () => {
 			const todo = createTodo({ id: 5 });
 			const screen = await render(<TodoItem todo={todo} />);
 
@@ -84,7 +82,7 @@ describe("TodoItem", () => {
 			expect(mockToggleMutate).toHaveBeenCalledWith({ data: { todoId: 5 } });
 		});
 
-		it("削除ボタンをクリックすると削除ミューテーションが呼ばれる", async () => {
+		it("calls delete mutation when delete button is clicked", async () => {
 			const todo = createTodo({ id: 10 });
 			const screen = await render(<TodoItem todo={todo} />);
 
@@ -94,8 +92,8 @@ describe("TodoItem", () => {
 		});
 	});
 
-	describe("ローディング状態", () => {
-		it("トグル処理中はチェックボックスが無効になる", async () => {
+	describe("Loading state", () => {
+		it("disables checkbox during toggle processing", async () => {
 			mockToggleIsPending = true;
 			const todo = createTodo();
 			const screen = await render(<TodoItem todo={todo} />);
@@ -103,7 +101,7 @@ describe("TodoItem", () => {
 			await expect.element(screen.getByRole("checkbox")).toBeDisabled();
 		});
 
-		it("削除処理中は削除ボタンが無効になる", async () => {
+		it("disables delete button during delete processing", async () => {
 			mockDeleteIsPending = true;
 			const todo = createTodo();
 			const screen = await render(<TodoItem todo={todo} />);

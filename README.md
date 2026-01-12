@@ -1,50 +1,49 @@
 # TanStack Start Template
 
-TanStack Start を使用したフルスタック React アプリケーションです。認証機能付きの Todo アプリを実装しています。
+This is a full-stack React application using TanStack Start. It implements a Todo app with authentication features.
 
-## 技術スタック
+## Tech Stack
 
-| カテゴリ | 技術 |
+| Category | Technology |
 |---------|------|
-| フレームワーク | [TanStack Start](https://tanstack.com/start) |
-| データベース | PostgreSQL + [Drizzle ORM](https://orm.drizzle.team/) |
-| 認証 | [Better Auth](https://www.better-auth.com/) |
+| Framework | [TanStack Start](https://tanstack.com/start) |
+| Database | PostgreSQL + [Drizzle ORM](https://orm.drizzle.team/) |
+| Authentication | [Better Auth](https://www.better-auth.com/) |
 | UI | [Shadcn UI](https://ui.shadcn.com/) + [Tailwind CSS v4](https://tailwindcss.com/) |
-| テスト | [Vitest](https://vitest.dev/) + [Playwright](https://playwright.dev/) |
+| Testing | [Vitest](https://vitest.dev/) + [Playwright](https://playwright.dev/) |
 
-## セットアップ
+## Setup
 
-### 必要な環境
+### Prerequisites
 
 - Node.js 20+
 - pnpm
 - PostgreSQL
-- Docker (データベース起動用)
+- Docker (for starting the database)
 
-### インストール
+### Installation
 
 ```bash
-# 依存関係のインストール
+# Install dependencies
 pnpm install
 
-# 環境変数の設定
+# Setup environment variables
 cp .env.example .env.local
-# .env.local を編集して DATABASE_URL を設定
+# Edit .env.local and set DATABASE_URL
 ```
 
-### 環境変数
+### Environment Variables
 
-`.env.local` ファイルに以下を設定してください：
+Please set the following in your `.env.local` file:
 
 ```env
 DATABASE_URL=postgresql://user:password@localhost:5432/myapp
 BETTER_AUTH_SECRET=your-secret-key
 ```
 
-## 開発
+## Development
 
-
-### 開発サーバー
+### Development Server
 
 ```bash
 docker compose up -d
@@ -54,39 +53,39 @@ pnpm run db:push
 pnpm dev
 ```
 
-## テスト
+## Testing
 
 ```bash
 pnpm test
 ```
 
-## プロジェクト構成
+## Project Structure
 
 ```
 src/
-├── components/     # UIコンポーネント
-│   ├── todos/      # Todo関連コンポーネント
-│   └── ui/         # Shadcn UIコンポーネント
-├── db/             # データベース設定・スキーマ
-├── integrations/   # 外部ライブラリ統合
-├── lib/            # ユーティリティ・設定
-├── middlewares/    # サーバー関数ミドルウェア
-├── routes/         # ファイルベースルーティング
-└── services/       # ビジネスロジック層
-    ├── auth/       # 認証サービス
-    └── todos/      # Todoサービス
+├── components/     # UI Components
+│   ├── todos/      # Todo related components
+│   └── ui/         # Shadcn UI components
+├── db/             # Database configuration & schema
+├── integrations/   # External library integrations
+├── lib/            # Utilities & Configuration
+├── middlewares/    # Server function middlewares
+├── routes/         # File-based routing
+└── services/       # Business logic layer
+    ├── auth/       # Authentication service
+    └── todos/      # Todo service
 ```
 
-## ビルド
+## Build
 
 ```bash
-# プロダクションビルド
+# Production build
 pnpm build
 
-# プロダクションビルドのプレビュー
+# Preview production build
 pnpm preview
 ```
 
-## ライセンス
+## License
 
 MIT License

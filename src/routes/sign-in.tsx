@@ -26,9 +26,9 @@ export const Route = createFileRoute("/sign-in")({
 
 const signInSchema = z.object({
 	email: z
-		.email("有効なメールアドレスを入力してください")
-		.min(1, "メールアドレスを入力してください"),
-	password: z.string().min(1, "パスワードを入力してください"),
+		.email("Please enter a valid email address")
+		.min(1, "Please enter your email address"),
+	password: z.string().min(1, "Please enter your password"),
 	rememberMe: z.boolean(),
 });
 
@@ -54,11 +54,11 @@ function SignInPage() {
 		<div className="min-h-screen flex items-center justify-center px-4">
 			<Card className="w-full max-w-md">
 				<CardHeader className="text-center">
-					<CardTitle className="text-2xl">サインイン</CardTitle>
+					<CardTitle className="text-2xl">Sign In</CardTitle>
 					<CardDescription>
-						アカウントをお持ちでないですか？{" "}
+						Don't have an account?{" "}
 						<Link to="/sign-up" className="text-primary hover:underline">
-							サインアップ
+							Sign up
 						</Link>
 					</CardDescription>
 				</CardHeader>
@@ -86,9 +86,7 @@ function SignInPage() {
 										field.state.meta.isTouched && !field.state.meta.isValid;
 									return (
 										<Field data-invalid={isInvalid}>
-											<FieldLabel htmlFor={field.name}>
-												メールアドレス
-											</FieldLabel>
+											<FieldLabel htmlFor={field.name}>Email</FieldLabel>
 											<Input
 												id={field.name}
 												name={field.name}
@@ -98,7 +96,7 @@ function SignInPage() {
 												onBlur={field.handleBlur}
 												onChange={(e) => field.handleChange(e.target.value)}
 												aria-invalid={isInvalid}
-												placeholder="メールアドレスを入力"
+												placeholder="Enter your email"
 											/>
 											{isInvalid && (
 												<FieldError errors={field.state.meta.errors} />
@@ -114,7 +112,7 @@ function SignInPage() {
 										field.state.meta.isTouched && !field.state.meta.isValid;
 									return (
 										<Field data-invalid={isInvalid}>
-											<FieldLabel htmlFor={field.name}>パスワード</FieldLabel>
+											<FieldLabel htmlFor={field.name}>Password</FieldLabel>
 											<Input
 												id={field.name}
 												name={field.name}
@@ -124,7 +122,7 @@ function SignInPage() {
 												onBlur={field.handleBlur}
 												onChange={(e) => field.handleChange(e.target.value)}
 												aria-invalid={isInvalid}
-												placeholder="パスワードを入力"
+												placeholder="Enter your password"
 											/>
 											{isInvalid && (
 												<FieldError errors={field.state.meta.errors} />
@@ -150,7 +148,7 @@ function SignInPage() {
 												htmlFor={field.name}
 												className="font-normal cursor-pointer"
 											>
-												ログイン状態を保持
+												Remember me
 											</FieldLabel>
 										</Field>
 									);
@@ -163,7 +161,7 @@ function SignInPage() {
 							disabled={signInMutation.isPending}
 							className="w-full"
 						>
-							{signInMutation.isPending ? "処理中..." : "サインイン"}
+							{signInMutation.isPending ? "Processing..." : "Sign in"}
 						</Button>
 					</form>
 				</CardContent>

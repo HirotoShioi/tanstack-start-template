@@ -1,131 +1,114 @@
-## Commands
+# PROJECT KNOWLEDGE BASE
 
-### Development
-- `pnpm dev` - Start development server on port 3000
-- `pnpm build` - Build for production
-- `pnpm preview` - Preview production build
-- `pnpm watch` - Run TypeScript type checking in watch mode
+**Generated:** 2026-01-25 06:14:34 JST  
+**Commit:** b1798e9  
+**Branch:** main
 
-### Testing
-- `pnpm test` - Run all tests
-- `pnpm test:browser` - Run browser-based component tests with Playwright
-  - Browser tests use the `*.browser.test.tsx` naming convention
-  - Non-browser tests use standard `*.test.ts` or `*.test.tsx` naming
-  - Browser test configuration in [vitest.config.ts](vitest.config.ts) under "browser" project
+## OVERVIEW
+TanStack Start full-stack React app with PostgreSQL/Drizzle ORM, Better Auth, Shadcn UI, and Vitest/Playwright testing.
 
-### Database (Drizzle ORM + PostgreSQL)
-- `pnpm db:generate` - Generate migration files from schema
-- `pnpm db:migrate` - Run migrations
-- `pnpm db:push` - Push schema changes directly to database
-- `pnpm db:pull` - Pull schema from database
-- `pnpm db:studio` - Open Drizzle Studio UI
-- Database schema is defined in [src/db/schema.ts](src/db/schema.ts)
-- Connection configured in [drizzle.config.ts](drizzle.config.ts) using `DATABASE_URL` from `.env.local`
-
-### Linting & Formatting
-- `pnpm lint` - Lint code with Biome
-- `pnpm format` - Check formatting with Biome
-- `pnpm fix` - Auto-fix formatting issues with Biome
-- `pnpm check` - Run all Biome checks
-- Uses tabs for indentation and double quotes (see [biome.json](biome.json))
-- Excludes: `src/routeTree.gen.ts`, `src/styles.css`, `src/components/ui/*`
-
-### Shadcn Components
-- `pnpm dlx shadcn@latest add <component>` - Add Shadcn UI components
-
-## Architecture
-
-### Tech Stack
-- **Framework**: TanStack Start (full-stack React meta-framework)
-- **Router**: TanStack Router with file-based routing
-- **State Management**: TanStack Query for server state
-- **Database**: PostgreSQL with Drizzle ORM
-- **Auth**: Better Auth with email/password
-- **UI**: Shadcn UI + Tailwind CSS v4
-- **Testing**: Vitest with browser testing via Playwright
-- **Build**: Vite with Nitro for SSR
-
-### Project Structure
-
-#### Routing ([src/routes/](src/routes/))
-File-based routing where each file becomes a route:
-- `__root.tsx` - Root layout component with `<Outlet />` for nested routes
-- `index.tsx` - Home page (`/`)
-- `todos.tsx` - Todos page (`/todos`)
-- `sign-in.tsx`, `sign-up.tsx` - Auth pages
-- `api/auth/$.ts` - Catch-all API route for Better Auth handlers
-
-Route files auto-generate [src/routeTree.gen.ts](src/routeTree.gen.ts) - do not edit manually.
-
-#### Services Layer ([src/services/](src/services/))
-Business logic organized by domain with consistent structure:
-- `*.server-functions.ts` - Server functions using `createServerFn()` from TanStack Start
-- `*.queries.ts` - TanStack Query hooks (query options, mutations)
-- `*.models.ts` - TypeScript types/interfaces
-- `*.repositories.ts` - Database access layer using Drizzle ORM
-- `*.schemas.ts` - Zod schemas for input validation
-
-Example pattern (todos):
-1. Client calls mutation hook from `*.queries.ts`
-2. Hook calls server function from `*.server-functions.ts`
-3. Server function validates input, uses middleware, calls repository
-4. Repository performs database operations via Drizzle
-
-#### Middleware ([src/middlewares/](src/middlewares/))
-- `auth.ts` - Authentication middleware using `createMiddleware()`
-  - Checks user session via `getUserSession()`
-  - Redirects to `/` if not authenticated
-  - Injects `userSession` into context for server functions
-
-#### Database ([src/db/](src/db/))
-- `schema.ts` - Drizzle schema with tables: `user`, `session`, `account`, `verification`, `todos`
-- `index.ts` - Database connection export
-- Better Auth uses Drizzle adapter for auth tables
-
-#### Authentication ([src/lib/](src/lib/))
-- `auth.ts` - Better Auth configuration with email/password and TanStack Start cookies plugin
-- `auth-client.ts` - Client-side auth instance
-- Better Auth API routes handled in `src/routes/api/auth/$.ts`
-
-#### Integrations ([src/integrations/](src/integrations/))
-- `tanstack-query/` - TanStack Query setup with provider and devtools
-
-#### Path Aliases
-- `@/*` maps to `./src/*` (configured in [tsconfig.json](tsconfig.json))
-- Use path aliases consistently: `import { db } from "@/db"`
-
-### Server Functions Pattern
-
-Server functions in this codebase use TanStack Start's `createServerFn()`:
-
-```typescript
-export const exampleFunction = createServerFn({ method: "POST" })
-  .inputValidator(ExampleSchema)  // Zod validation
-  .middleware([authMiddleware])   // Auth check
-  .handler(async ({ context, data }) => {
-    const { userSession } = context;
-    // Business logic here
-  });
+## STRUCTURE
+```
+my-app/
+├── src/
+│   ├── routes/         # File-based routing (see src/routes/AGENTS.md)
+│   ├── services/       # Domain logic layers (auth, todos)
+│   ├── components/     # React components (ui/, todos/)
+│   ├── db/             # Drizzle schema + connection
+│   ├── lib/            # Auth + utilities
+│   ├── middlewares/    # Server function middleware
+│   ├── integrations/   # TanStack Query setup
+│   └── test/           # Test helpers (render.tsx, setup.browser.ts)
+├── drizzle/            # Migration files
+└── public/             # Static assets
 ```
 
-- Server functions are type-safe and can be called directly from client components
-- Mutations automatically work with TanStack Query
-- Use `.middleware([authMiddleware])` for protected endpoints
+## WHERE TO LOOK
+| Task | Location | Notes |
+|------|----------|-------|
+| Add route | `src/routes/*.tsx` | Auto-generates routeTree.gen.ts |
+| Add API endpoint | `src/routes/api/**/*.ts` | Catch-all via `$.ts` |
+| Add domain logic | `src/services/{domain}/` | Follow *.server-functions.ts pattern |
+| Add DB table | `src/db/schema.ts` | Then `pnpm db:push` |
+| Add UI component | `src/components/{domain}/` | Use Shadcn via `pnpm dlx shadcn@latest add` |
+| Auth config | `src/lib/auth.ts` | Better Auth setup |
+| Middleware | `src/middlewares/auth.ts` | Use with `.middleware([authMiddleware])` |
 
-### Testing Patterns
+## CONVENTIONS
+- **Formatting**: Tabs (not spaces), double quotes enforced by Biome
+- **Excludes**: `src/routeTree.gen.ts`, `src/styles.css`, `src/components/ui/*` (Biome ignores)
+- **Path alias**: `@/*` → `./src/*` (use consistently)
+- **File naming**: kebab-case for files, PascalCase for components
+- **Server functions**: Use `createServerFn()` with `.inputValidator()` + `.middleware()` + `.handler()`
+- **Test naming**: `*.browser.test.tsx` for Playwright, `*.test.ts` for unit tests
 
-- **Browser tests** (`*.browser.test.tsx`): Component tests using Playwright
-  - Use `render()` from `@/test/render`
-  - Mock hooks with `vi.mock()`
-  - Use `userEvent` from `vitest/browser` for interactions
-  - Run with `pnpm test:browser`
+## SERVICES PATTERN
+Each domain (auth, todos) follows:
+```
+{domain}/
+├── {domain}.server-functions.ts   # Server endpoints (createServerFn)
+├── {domain}.queries.ts             # Client hooks (useMutation, queryOptions)
+├── {domain}.repositories.ts        # DB access layer (Drizzle)
+├── {domain}.schemas.ts             # Zod validation schemas
+└── {domain}.models.ts              # TypeScript types
+```
 
-- **Unit tests** (standard `*.test.ts`): Use Vitest with jsdom
-  - Run with `pnpm test`
+**Flow**: Client → queries.ts → server-functions.ts → middleware → repositories.ts → DB
 
-### Code Style
-- TypeScript with strict mode enabled
-- Tabs for indentation (enforced by Biome)
-- Double quotes for strings (enforced by Biome)
-- React 19 with JSX transform
-- File naming: kebab-case for files, PascalCase for components
+## DATABASE
+- **Schema**: `src/db/schema.ts` (user, session, account, verification, todos)
+- **Better Auth tables**: Managed via Drizzle adapter
+- **Push changes**: `pnpm db:push` (dev), `pnpm db:generate && pnpm db:migrate` (prod)
+- **Studio**: `pnpm db:studio` for GUI
+
+## AUTH
+- **Middleware**: `authMiddleware` checks session, redirects if unauthenticated, injects `userSession` into context
+- **Server**: `getUserSession()` in `auth.server-functions.ts`
+- **Client**: `useSignIn/useSignUp/useSignOut` in `auth.queries.ts`
+- **Routes**: `/api/auth/$` catch-all delegates to Better Auth handler
+
+## TESTING
+- **Browser tests**: `*.browser.test.tsx` uses Playwright via `pnpm test:browser`
+  - Setup: `src/test/setup.browser.ts` (cleanup after each)
+  - Helper: `src/test/render.tsx` (wraps with QueryClientProvider)
+- **Unit tests**: `*.test.ts` via `pnpm test`
+- **Config**: `vitest.config.ts` (browser project) + `vitest.browser.config.ts`
+
+## ANTI-PATTERNS (THIS PROJECT)
+- **NEVER** use `as any`, `@ts-ignore`, `@ts-expect-error`
+- **NEVER** edit `src/routeTree.gen.ts` (auto-generated)
+- **NEVER** edit `src/components/ui/*` directly (Shadcn managed)
+- **NEVER** commit without explicit request
+- **NEVER** suppress type errors
+
+## COMMANDS
+```bash
+# Dev
+pnpm dev              # Start dev server (port 3000)
+pnpm build            # Production build
+pnpm preview          # Preview prod build
+
+# DB
+pnpm db:push          # Push schema to DB (dev)
+pnpm db:generate      # Generate migrations
+pnpm db:migrate       # Run migrations
+pnpm db:studio        # Open Drizzle Studio
+
+# Test
+pnpm test             # Unit tests
+pnpm test:browser     # Browser tests (Playwright)
+
+# Lint/Format
+pnpm lint             # Lint with Biome
+pnpm format           # Check formatting
+pnpm fix              # Auto-fix formatting
+pnpm check            # All Biome checks
+pnpm watch            # Type-check in watch mode
+```
+
+## GOTCHAS
+- `src/routes/api/auth/$.ts` uses catch-all routing (`$`) for Better Auth
+- Biome, not ESLint/Prettier (tabs + double quotes enforced)
+- CI runs lint/typecheck/build but **no tests** (add if needed)
+- Database scripts (`db:*`) integrated in root package.json (full-stack setup)
+- TanStack Start uses Vite + Nitro for SSR

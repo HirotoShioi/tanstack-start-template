@@ -2,7 +2,10 @@ import { Trash2 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Checkbox } from "@/components/ui/checkbox";
 import type { Todo } from "../../services/todos/todos.models";
-import { useDeleteTodo, useToggleTodo } from "../../services/todos/todos.queries";
+import {
+	useDeleteTodo,
+	useToggleTodo,
+} from "../../services/todos/todos.queries";
 
 interface TodoItemProps {
 	todo: Todo;

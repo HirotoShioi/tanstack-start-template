@@ -18,7 +18,7 @@ export const getTodos = createServerFn()
 export const addTodo = createServerFn({
 	method: "POST",
 })
-	.inputValidator(AddTodoSchema)
+	.validator(AddTodoSchema)
 	.middleware([authMiddleware])
 	.handler(async ({ context, data }) => {
 		const { userSession } = context;
@@ -30,7 +30,7 @@ export const addTodo = createServerFn({
 export const deleteTodo = createServerFn({
 	method: "POST",
 })
-	.inputValidator(DeleteTodoSchema)
+	.validator(DeleteTodoSchema)
 	.middleware([authMiddleware])
 	.handler(async ({ context, data }) => {
 		const { userSession } = context;
@@ -41,7 +41,7 @@ export const deleteTodo = createServerFn({
 export const toggleTodoCompletion = createServerFn({
 	method: "POST",
 })
-	.inputValidator(ToggleTodoSchema)
+	.validator(ToggleTodoSchema)
 	.middleware([authMiddleware])
 	.handler(async ({ context, data }) => {
 		const { userSession } = context;

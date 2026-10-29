@@ -100,7 +100,7 @@ Server functions in this codebase use TanStack Start's `createServerFn()`:
 
 ```typescript
 export const exampleFunction = createServerFn({ method: "POST" })
-  .inputValidator(ExampleSchema)  // Zod validation
+  .validator(ExampleSchema)  // Zod validation
   .middleware([authMiddleware])   // Auth check
   .handler(async ({ context, data }) => {
     const { userSession } = context;

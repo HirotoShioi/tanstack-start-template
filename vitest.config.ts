@@ -1,15 +1,12 @@
 import { defineConfig } from "vitest/config";
 import { playwright } from "@vitest/browser-playwright";
 import react from "@vitejs/plugin-react";
-import viteTsConfigPaths from "vite-tsconfig-paths";
 
 export default defineConfig({
-  plugins: [
-    react(),
-    viteTsConfigPaths({
-      projects: ["./tsconfig.json"],
-    }),
-  ],
+  plugins: [react()],
+  resolve: {
+    tsconfigPaths: true,
+  },
   optimizeDeps: {
     exclude: ["@tanstack/react-start", "@tanstack/start-server-core"],
   },

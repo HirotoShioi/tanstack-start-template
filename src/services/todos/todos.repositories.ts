@@ -1,4 +1,4 @@
-import { and, asc, eq } from "drizzle-orm";
+import { and, asc, eq, not } from "drizzle-orm";
 import { db } from "@/db";
 import { todos } from "@/db/schema";
 import type { Todo } from "./todos.models";
@@ -37,17 +37,10 @@ async function deleteTodo(userId: string, todoId: number): Promise<void> {
 }
 
 async function toggleCompletion(userId: string, todoId: number): Promise<void> {
-	const [todo] = await db
-		.select()
-		.from(todos)
+	await db
+		.update(todos)
+		.set({ completed: not(todos.completed) })
 		.where(and(eq(todos.id, todoId), eq(todos.userId, userId)));
-
-	if (todo) {
-		await db
-			.update(todos)
-			.set({ completed: !todo.completed })
-			.where(and(eq(todos.id, todoId), eq(todos.userId, userId)));
-	}
 }
 
 export const todoRepository: TodoRepository = {

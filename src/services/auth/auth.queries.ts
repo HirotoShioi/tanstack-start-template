@@ -1,5 +1,9 @@
-import { queryOptions, useMutation } from "@tanstack/react-query";
-import { useNavigate, useRouter } from "@tanstack/react-router";
+import {
+	queryOptions,
+	useMutation,
+	useQueryClient,
+} from "@tanstack/react-query";
+import { useNavigate } from "@tanstack/react-router";
 import { authClient } from "@/lib/auth-client";
 import { getUserSession } from "./auth.server-functions";
 
@@ -28,6 +32,7 @@ export type SignUpInput = {
 
 export function useSignIn() {
 	const navigate = useNavigate();
+	const queryClient = useQueryClient();
 
 	return useMutation({
 		mutationFn: async (input: SignInInput) => {
@@ -45,6 +50,8 @@ export function useSignIn() {
 			return data;
 		},
 		onSuccess: () => {
+			// Drop any data cached for a previous user before entering the app
+			queryClient.clear();
 			navigate({ to: "/" });
 		},
 	});
@@ -52,6 +59,7 @@ export function useSignIn() {
 
 export function useSignUp() {
 	const navigate = useNavigate();
+	const queryClient = useQueryClient();
 
 	return useMutation({
 		mutationFn: async (input: SignUpInput) => {
@@ -69,13 +77,16 @@ export function useSignUp() {
 			return data;
 		},
 		onSuccess: () => {
+			// Drop any data cached for a previous user before entering the app
+			queryClient.clear();
 			navigate({ to: "/" });
 		},
 	});
 }
 
 export function useSignOut() {
-	const router = useRouter();
+	const navigate = useNavigate();
+	const queryClient = useQueryClient();
 
 	return useMutation({
 		mutationFn: async () => {
@@ -85,8 +96,10 @@ export function useSignOut() {
 				throw new Error(error.message || "Failed to sign out");
 			}
 		},
-		onSuccess: () => {
-			router.invalidate();
+		onSuccess: async () => {
+			// Leave protected routes first so no mounted query refetches, then drop the cache
+			await navigate({ to: "/" });
+			queryClient.clear();
 		},
 	});
 }

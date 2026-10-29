@@ -2,6 +2,7 @@
   "name": "my-app",
   "private": true,
   "type": "module",
+  "packageManager": "pnpm@12.8.1",
   "scripts": {
     "dev": "vite dev --port 3000 --force",
     "build": "vite build",

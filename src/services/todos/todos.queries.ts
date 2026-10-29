@@ -1,5 +1,8 @@
-import { queryOptions, useMutation } from "@tanstack/react-query";
-import { queryClient } from "@/lib/query-client";
+import {
+	queryOptions,
+	useMutation,
+	useQueryClient,
+} from "@tanstack/react-query";
 import {
 	addTodo,
 	deleteTodo,
@@ -19,6 +22,8 @@ export function getTodosOptions() {
 }
 
 export function useAddTodo() {
+	const queryClient = useQueryClient();
+
 	return useMutation({
 		mutationFn: addTodo,
 		onSuccess: () => {
@@ -30,6 +35,8 @@ export function useAddTodo() {
 }
 
 export function useDeleteTodo() {
+	const queryClient = useQueryClient();
+
 	return useMutation({
 		mutationFn: deleteTodo,
 		onSuccess: () => {
@@ -41,6 +48,8 @@ export function useDeleteTodo() {
 }
 
 export function useToggleTodo() {
+	const queryClient = useQueryClient();
+
 	return useMutation({
 		mutationFn: toggleTodoCompletion,
 		onSuccess: () => {

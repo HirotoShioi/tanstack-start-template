@@ -8,7 +8,11 @@ import { getTodosOptions } from "@/services/todos/todos.queries";
 
 export const Route = createFileRoute("/_authenticated/todos")({
 	loader: async ({ context }) => {
-		await context.queryClient.fetchQuery(getTodosOptions());
+		// Use cached data if present; useSuspenseQuery keeps it fresh after render
+		await context.queryClient.query({
+			...getTodosOptions(),
+			staleTime: "static",
+		});
 	},
 	component: TodoList,
 });

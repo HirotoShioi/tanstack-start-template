@@ -1,2 +1,6 @@
 allowBuilds:
   esbuild: true
+minimumReleaseAgeExclude:
+  # 0.8.6 removes a stale `intent` bin that shadows @tanstack/intent's CLI
+  - "@tanstack/devtools-vite@0.8.6"
+  - "@tanstack/devtools-bundler-core@0.1.4"

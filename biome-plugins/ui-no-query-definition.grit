@@ -1,0 +1,9 @@
+language js
+
+// クエリ・ミューテーションの定義は src/services/<domain>/*.queries.ts に集める。
+or { `queryKey: $_`, `queryFn: $_`, `mutationFn: $_` } as $definition where {
+	register_diagnostic(
+		span = $definition,
+		message = "UI 層ではクエリを定義しない。src/services/<domain>/*.queries.ts に定義したフックを呼ぶ。"
+	)
+}

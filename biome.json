@@ -11,7 +11,7 @@
 			"**/src/**/*",
 			"**/.vscode/**/*",
 			"**/index.html",
-			"**/vite.config.js",
+			"**/vite.config.ts",
 			"!**/src/routeTree.gen.ts",
 			"!**/src/styles.css",
 			"!**/src/components/ui/*"
@@ -21,7 +21,13 @@
 		"enabled": true,
 		"indentStyle": "tab"
 	},
-	"assist": { "actions": { "source": { "organizeImports": "on" } } },
+	"assist": {
+		"actions": {
+			"source": {
+				"organizeImports": "on"
+			}
+		}
+	},
 	"linter": {
 		"enabled": true,
 		"rules": {
@@ -32,5 +38,79 @@
 		"formatter": {
 			"quoteStyle": "double"
 		}
-	}
+	},
+	"overrides": [
+		{
+			"includes": [
+				"**/src/routes/**",
+				"**/src/components/**",
+				"!**/src/routes/api/**"
+			],
+			"plugins": ["./biome-plugins/ui-no-query-definition.grit"],
+			"linter": {
+				"rules": {
+					"style": {
+						"noRestrictedImports": {
+							"level": "error",
+							"options": {
+								"paths": {
+									"@/db": "UI 層は DB に触れない。services のフックを経由する。",
+									"@/db/schema": "UI 層は DB スキーマに触れない。型は services の *.models.ts から取る。",
+									"@/lib/auth": "@/lib/auth はサーバ専用。UI 層では services/auth のフックを使う。",
+									"@tanstack/react-query": {
+										"importNames": [
+											"useMutation",
+											"useQueryClient",
+											"useInfiniteQuery",
+											"queryOptions",
+											"infiniteQueryOptions"
+										],
+										"message": "クエリやミューテーションは services の *.queries.ts で組み立て、UI 層はそのフックを呼ぶだけにする。"
+									}
+								},
+								"patterns": [
+									{
+										"group": [
+											"@/services/*/*.repositories",
+											"@/services/*/*.server-functions"
+										],
+										"message": "UI 層から repositories / server-functions を直接呼ばない。*.queries.ts のフックを経由する。"
+									}
+								]
+							}
+						}
+					}
+				}
+			}
+		},
+		{
+			"includes": ["**/vite.config.ts"],
+			"plugins": ["./biome-plugins/vite-sourcemap-off.grit"]
+		},
+		{
+			"includes": ["**/src/services/**"],
+			"linter": {
+				"rules": {
+					"style": {
+						"noRestrictedImports": {
+							"level": "error",
+							"options": {
+								"patterns": [
+									{
+										"group": [
+											"@/components/**",
+											"@/routes/**",
+											"**/components/**",
+											"**/routes/**"
+										],
+										"message": "services は UI 層に依存しない（依存の向きは UI → services のみ）。"
+									}
+								]
+							}
+						}
+					}
+				}
+			}
+		}
+	]
 }

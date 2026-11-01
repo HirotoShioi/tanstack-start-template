@@ -1,0 +1,10 @@
+language js
+
+// 本番ビルドにソースマップを含めない。
+`sourcemap: $value` as $option where {
+	$value <: not `false`,
+	register_diagnostic(
+		span = $option,
+		message = "build.sourcemap は false のままにする（ソースマップを公開しない）。"
+	)
+}

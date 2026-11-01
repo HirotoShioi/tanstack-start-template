@@ -6,6 +6,8 @@ import {
 	Scripts,
 } from "@tanstack/react-router";
 import { TanStackRouterDevtoolsPanel } from "@tanstack/react-router-devtools";
+import { Toaster } from "@/components/ui/sonner";
+import { TooltipProvider } from "@/components/ui/tooltip";
 import TanStackQueryDevtools from "@/integrations/tanstack-query/devtools";
 import { getUserSessionOptions } from "@/services/auth/auth.queries";
 import appCss from "@/styles.css?url";
@@ -51,7 +53,10 @@ function RootDocument({ children }: { children: React.ReactNode }) {
 				<HeadContent />
 			</head>
 			<body>
-				{children}
+				<TooltipProvider>
+					{children}
+					<Toaster richColors closeButton />
+				</TooltipProvider>
 				<TanStackDevtools
 					config={{
 						position: "bottom-right",
